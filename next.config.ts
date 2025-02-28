@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
+  output: "export",
   i18n: {
     locales: ["uk", "en"],
     defaultLocale: "uk",
