@@ -1,8 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: true,
+  trailingSlash: true,
+  i18n: {
+    locales: ["uk", "en"],
+    defaultLocale: "uk",
+    localeDetection: false,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "wow.utest.site",
+        pathname: "**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

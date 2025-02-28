@@ -1,0 +1,16 @@
+{
+  "form": {
+    "nameLabel": "Ім'я:",
+    "namePlaceholder": "Ваше ім'я",
+    "textRequired": "Поле обов'язкове",
+    "nameMinLength": "Мінімум 2 символи",
+    "emailLabel": "Електронна пошта:",
+    "emailPlaceholder": "you@example.com",
+    "formatInvalid": "Невірний формат",
+    "messageLabel": "Повідомлення (Необов'язково):",
+    "messagePlaceholder": "Ваше повідомлення (необов'язково)",
+    "send": "Відправити",
+    "sending": "Відправка...",
+    "success": "Форма успішно відправлена!"
+  }
+}

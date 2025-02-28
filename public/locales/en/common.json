@@ -1,0 +1,16 @@
+{
+  "form": {
+    "nameLabel": "Name:",
+    "namePlaceholder": "Your name",
+    "textRequired": "Field is required",
+    "nameMinLength": "At least 2 characters",
+    "emailLabel": "Email:",
+    "emailPlaceholder": "you@example.com",
+    "formatInvalid": "Invalid format",
+    "messageLabel": "Message (Optional):",
+    "messagePlaceholder": "Your message (optional)",
+    "send": "Send",
+    "sending": "Sending...",
+    "success": "Form submitted successfully!"
+  }
+}
