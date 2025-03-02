@@ -16,9 +16,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const actualSlug = pageSlug.length === 0 ? "front-page" : pageSlug.join("/");
 
-  const [pagesRes, menusRes, optionsRes] = await Promise.all([
+  const [pagesRes] = await Promise.all([
     fetch(`${backendDomain}/wp-json/wp/v2/pages`),
+  ]);
+
+  const [menusRes] = await Promise.all([
     fetch(`${backendDomain}/wp-json/custom/v1/menus`),
+  ]);
+
+  const [optionsRes] = await Promise.all([
     fetch(`${backendDomain}/wp-json/options/all`),
   ]);
 
