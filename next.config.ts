@@ -1,15 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "export",
   reactStrictMode: true,
   trailingSlash: true,
-  output: "export",
-  i18n: {
-    locales: ["uk", "en"],
-    defaultLocale: "uk",
-    localeDetection: false,
-  },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

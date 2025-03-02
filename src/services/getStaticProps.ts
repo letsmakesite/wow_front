@@ -1,28 +1,20 @@
 import { GetStaticProps } from "next";
+import { defaultLocale, supportedLocales } from "@/lib/constants";
 import { Meta, Navigation } from "@/lib/types";
-import fs from "fs";
-import path from "path";
 
 const backendDomain = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
-export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
-  const filePath = path.join(
-    process.cwd(),
-    `public/locales/${locale}/common.json`
-  );
-
-  if (!fs.existsSync(filePath)) {
-    return { notFound: true };
-  }
-
-  const translations = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug } = params as { slug?: string[] };
 
-  if (slug && slug.length === 1 && slug[0] === "front-page") {
-    return { notFound: true };
+  let locale = defaultLocale;
+  let pageSlug = slug || [];
+
+  if (pageSlug.length > 0 && supportedLocales.includes(pageSlug[0])) {
+    [locale, ...pageSlug] = pageSlug;
   }
-  const actualSlug = !slug || slug.length === 0 ? "front-page" : slug.join("/");
+
+  const actualSlug = pageSlug.length === 0 ? "front-page" : pageSlug.join("/");
 
   const [pagesRes, menusRes, optionsRes] = await Promise.all([
     fetch(`${backendDomain}/wp-json/wp/v2/pages`),
@@ -38,20 +30,15 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     [pagesRes.json(), menusRes.json(), optionsRes.json()]
   );
 
-  const basePage = pages.find((page) => page.slug === actualSlug);
-  if (!basePage) {
-    return { notFound: true };
-  }
+  const basePage = pages.find((page: any) => page.slug === actualSlug);
+  if (!basePage) return { notFound: true };
 
-  const translation = locale ? basePage.translations?.[locale] : undefined;
-  if (!translation) {
-    return { notFound: true };
-  }
+  const translation = basePage.translations?.[locale];
+  const localizedPage = translation
+    ? pages.find((page: any) => page.id === translation.post_id)
+    : basePage;
 
-  const localizedPage = pages.find((page) => page.id === translation.post_id);
-  if (!localizedPage) {
-    return { notFound: true };
-  }
+  if (!localizedPage) return { notFound: true };
 
   const meta: Meta = {
     title: localizedPage.yoast_head_json?.title ?? "No title",
@@ -75,8 +62,10 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
         name: block.name?.replace("block-", "") || "unknown",
         data: block.data || {},
       })),
+      locale,
       options: localizedOptions,
-      translations,
+      translations: (await import(`../../locales/${locale}/common.json`))
+        .default,
     },
   };
 };

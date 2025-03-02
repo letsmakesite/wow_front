@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
-import { createTranslator } from "@/lib/utils";
 import { useRouter } from "next/router";
+import { defaultLocale } from "@/lib/constants";
+import { useLocale, useTranslations } from "next-intl";
 
 async function submitContactForm(data: any) {
   const backendDomain = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
@@ -34,10 +35,10 @@ async function submitContactForm(data: any) {
   }
 }
 
-export default function ContactForm({ translations }: { translations: any }) {
-  const t = createTranslator(translations);
+export default function ContactForm() {
+  const locale = useLocale();
+  const t = useTranslations("form");
   const router = useRouter();
-  const { locale, defaultLocale } = router;
   const {
     register,
     handleSubmit,
@@ -48,12 +49,10 @@ export default function ContactForm({ translations }: { translations: any }) {
   const onSubmit = async (data: any) => {
     try {
       await submitContactForm(data);
-      // alert(t("form.success"));
       reset();
       const isDefaultLocale = locale === defaultLocale;
-      router.push("/success/", "/success/", {
-        locale: isDefaultLocale ? undefined : locale,
-      });
+      const path = isDefaultLocale ? "/success" : `/${locale}/success`;
+      router.push(path);
     } catch (error) {
       alert(error instanceof Error ? error.message : "Unknown error");
     }
@@ -63,16 +62,16 @@ export default function ContactForm({ translations }: { translations: any }) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label htmlFor="name" className="block mb-1 font-medium">
-          {t("form.nameLabel")}
+          {t("nameLabel")}
         </label>
         <input
           id="name"
           {...register("name", {
-            required: t("form.textRequired"),
-            minLength: { value: 2, message: t("form.nameMinLength") },
+            required: t("textRequired"),
+            minLength: { value: 2, message: t("nameMinLength") },
           })}
           className="w-full p-2 border rounded-lg focus:outline-none"
-          placeholder={t("form.namePlaceholder")}
+          placeholder={t("namePlaceholder")}
         />
         {errors.name && (
           <p className="text-red-500 text-sm">{String(errors.name.message)}</p>
@@ -81,19 +80,19 @@ export default function ContactForm({ translations }: { translations: any }) {
 
       <div>
         <label htmlFor="email" className="block mb-1 font-medium">
-          {t("form.emailLabel")}
+          {t("emailLabel")}
         </label>
         <input
           id="email"
           {...register("email", {
-            required: t("form.textRequired"),
+            required: t("textRequired"),
             pattern: {
               value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
-              message: t("form.formatInvalid"),
+              message: t("formatInvalid"),
             },
           })}
           className="w-full p-2 border rounded-lg focus:outline-none"
-          placeholder={t("form.emailPlaceholder")}
+          placeholder={t("emailPlaceholder")}
         />
         {errors.email && (
           <p className="text-red-500 text-sm">{String(errors.email.message)}</p>
@@ -102,13 +101,13 @@ export default function ContactForm({ translations }: { translations: any }) {
 
       <div>
         <label htmlFor="message" className="block mb-1 font-medium">
-          {t("form.messageLabel")}
+          {t("messageLabel")}
         </label>
         <textarea
           id="message"
           {...register("message")}
           className="w-full p-2 border rounded-lg focus:outline-none resize-none"
-          placeholder={t("form.messagePlaceholder")}
+          placeholder={t("messagePlaceholder")}
           rows={4}
         />
       </div>
@@ -118,7 +117,7 @@ export default function ContactForm({ translations }: { translations: any }) {
         disabled={isSubmitting}
         className="w-full bg-orange-500 text-white p-2 rounded-lg hover:bg-orange-600 transition disabled:opacity-50"
       >
-        {isSubmitting ? t("form.sending") : t("form.send")}
+        {isSubmitting ? t("sending") : t("send")}
       </button>
     </form>
   );

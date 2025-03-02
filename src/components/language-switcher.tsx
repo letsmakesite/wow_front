@@ -1,21 +1,30 @@
 import clsx from "clsx";
 import { useRouter } from "next/router";
+import { supportedLocales, defaultLocale } from "@/lib/constants";
+import { useLocale } from "next-intl";
 
 export default function LanguageSwitcher() {
   const router = useRouter();
-  const { locale, locales } = router;
+  const locale = useLocale();
+  const { asPath } = router;
 
   const changeLanguage = (lang: string) => {
-    router.push(router.asPath, router.asPath, { locale: lang });
+    if (lang === locale) return;
+    const localeRegex = new RegExp(`^/(${supportedLocales.join("|")})`);
+
+    const cleanPath = asPath.replace(localeRegex, "") || "/";
+    const newPath = lang === defaultLocale ? cleanPath : `/${lang}${cleanPath}`;
+
+    router.push(newPath);
   };
 
   return (
     <div className="flex gap-4 bg-gray-500 px-4 py-2 rounded-md">
-      {locales?.map((lang: string) => (
+      {supportedLocales.map((lang) => (
         <button
           key={lang}
           onClick={() => changeLanguage(lang)}
-          className={clsx("transition-colors hover:text-orange-600", {
+          className={clsx("transition-colors hover:text-orange-600 uppercase", {
             hidden: locale === lang,
           })}
         >

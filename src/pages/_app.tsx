@@ -1,6 +1,14 @@
-import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import { IntlProvider } from "next-intl";
+import "../styles/globals.css";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <IntlProvider
+      locale={pageProps.locale}
+      messages={pageProps.translations || {}}
+    >
+      <Component {...pageProps} />
+    </IntlProvider>
+  );
 }

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import HomeLink from "@/components/home-link";
 
 interface BlockSuccess {
   block: {
@@ -15,12 +15,13 @@ export default function BlockSuccess({ block }: BlockSuccess) {
         <div className="custom-holder text-center">
           <h1 className="mb-4">{block.title}</h1>
           <p className="mb-4">{block.text}</p>
-          <Link
+
+          <HomeLink
             className="w-full bg-orange-500 text-white p-2 rounded-lg hover:bg-orange-600 transition block"
             href="/"
           >
             {block.buttonText}
-          </Link>
+          </HomeLink>
         </div>
       </div>
     </section>

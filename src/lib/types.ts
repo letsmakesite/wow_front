@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { LinkProps } from "next/link";
 
 export interface LayoutProps {
   meta: Meta;
@@ -12,7 +13,6 @@ export interface PageProps {
   navigation: Navigation[];
   blocks: { name: string; data: any }[];
   options: any;
-  translations: any;
 }
 
 export interface HeadProps {
@@ -60,4 +60,9 @@ export interface HeaderProps {
 export interface FooterProps {
   navigation: Navigation[];
   options: any;
+}
+
+export interface HomeLinkProps extends LinkProps {
+  children: ReactNode;
+  className?: string;
 }

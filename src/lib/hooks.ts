@@ -1,9 +1,9 @@
-import { useRouter } from "next/router";
 import { Navigation, MenuItem } from "./types";
+import { defaultLocale } from "./constants";
+import { useLocale } from "next-intl";
 
 export function useMenu(navigation: Navigation[], menuKey: string): MenuItem[] {
-  const { locale, defaultLocale } = useRouter();
-
+  const locale = useLocale();
   const localizedKey = `${menuKey}-${locale}`;
   const menu =
     navigation.find((menu) => menu.slug === localizedKey)?.items ?? [];

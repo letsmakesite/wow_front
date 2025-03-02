@@ -5,13 +5,7 @@ import Layout from "@/layouts/layout";
 import dynamic from "next/dynamic";
 import { PageProps } from "@/lib/types";
 
-export default function Page({
-  meta,
-  navigation,
-  blocks,
-  options,
-  translations,
-}: PageProps) {
+export default function Page({ meta, navigation, blocks, options }: PageProps) {
   return (
     <Layout meta={meta} navigation={navigation} options={options}>
       {blocks.map((block, index) => {
@@ -19,13 +13,7 @@ export default function Page({
           () => import(`../blocks/${block.name}`),
           { ssr: false }
         );
-        return (
-          <BlockComponent
-            key={index}
-            block={block.data}
-            translations={translations}
-          />
-        );
+        return <BlockComponent key={index} block={block.data} />;
       })}
     </Layout>
   );
